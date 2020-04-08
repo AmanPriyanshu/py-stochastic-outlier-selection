@@ -73,6 +73,12 @@ def binding_matrix(aMatrix):
 	return binding_matrix
 
 
+def outlier_probability(bMatrix):
+	outlier_matrix = np.empty(bMatrix.shape[0])
+	for i in range(bMatrix.shape[0]):
+		condition = [(1-bMatrix[j][i]) for j in range(bMatrix.shape[0])]
+		outlier_matrix[i] = np.prod(condition)
+	return outlier_matrix
 
 
 
@@ -82,11 +88,18 @@ cleaned_data = data_cleaner_numerically(data, remove_nan=True, features_to_remov
 dMatrix = dissimilarity_matrix(cleaned_data[:500])
 variance_matrix, affinity_matrix = affinity_matrix(dMatrix, 50)
 binding_matrix = binding_matrix(affinity_matrix)
-print(binding_matrix)
+outlier_matrix = outlier_probability(binding_matrix)
+
 
 
 # Now here the binding matrix basically gives the probability of a particular
-print(binding_matrix[41][2])    #7.009510987249058e-13
-print(binding_matrix[3][2])     #0.015065941745409707
+#print(binding_matrix[41][2])    #7.009510987249058e-13
+#print(binding_matrix[3][2])     #0.015065941745409707
 
+
+
+
+
+
+print(outlier_matrix)                     #This matrix is the probability whether a point is an outlier or not
 #Now here we can clearly see that the 41st index is an outlier compared to the 2 and 3. This dataset was not meant for outlier detection however, this is how it would work. All references are taken from the paper:
