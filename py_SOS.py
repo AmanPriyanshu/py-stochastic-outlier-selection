@@ -83,3 +83,10 @@ dMatrix = dissimilarity_matrix(cleaned_data[:500])
 variance_matrix, affinity_matrix = affinity_matrix(dMatrix, 50)
 binding_matrix = binding_matrix(affinity_matrix)
 print(binding_matrix)
+
+
+# Now here the binding matrix basically gives the probability of a particular
+print(binding_matrix[41][2])    #7.009510987249058e-13
+print(binding_matrix[3][2])     #0.015065941745409707
+
+#Now here we can clearly see that the 41st index is an outlier compared to the 2 and 3. This dataset was not meant for outlier detection however, this is how it would work. All references are taken from the paper:
