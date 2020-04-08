@@ -101,5 +101,7 @@ outlier_matrix = outlier_probability(binding_matrix)
 
 
 
-print(outlier_matrix)                     #This matrix is the probability whether a point is an outlier or not
-#Now here we can clearly see that the 41st index is an outlier compared to the 2 and 3. This dataset was not meant for outlier detection however, this is how it would work. All references are taken from the paper:
+print(outlier_matrix)                     #This matrix is the probability whether a point is an outlier or not as we see I have manipulated the 
+#first data to all values being 0 and hence it has a probability of 0.95265683 and hence is definitely an outlier
+
+
