@@ -85,6 +85,9 @@ def outlier_probability(bMatrix):
 dataset, shape_change_after_cleaning = data_reader('./cardataset.csv', 0)
 data = feature_extractor(dataset, ["Engine HP", "Engine Cylinders", "highway MPG", "city mpg", "Popularity", "MSRP"])
 cleaned_data = data_cleaner_numerically(data, remove_nan=True, features_to_remove=["Engine HP", "Engine Cylinders", "highway MPG", "city mpg", "Popularity", "MSRP"], shape=shape_change_after_cleaning[1])
+
+
+
 dMatrix = dissimilarity_matrix(cleaned_data[:500])
 variance_matrix, affinity_matrix = affinity_matrix(dMatrix, 50)
 binding_matrix = binding_matrix(affinity_matrix)
