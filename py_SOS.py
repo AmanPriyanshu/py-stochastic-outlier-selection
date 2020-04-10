@@ -45,39 +45,53 @@ def dissimilarity_matrix(data):
 
 	return dissimilarity_matrix
 
+def get_perplexity(D_row, variance):
+    	A_row = np.exp(-D_row * variance)
+    	sumA = sum(A_row)
+    	perplexity = np.log(sumA) + variance * np.sum(D_row * A_row) / sumA
+    	return perplexity, A_row
+
 def affinity_matrix(dMatrix, perplexity):
-	variance_matrix = np.empty(dMatrix.shape[0])
-	affinity_matrix = np.empty(dMatrix.shape)
+	(n, _) = dMatrix.shape
+	variance_matrix = np.ones(dMatrix.shape[0])
+	affinity_matrix = np.zeros(dMatrix.shape)
+  	logU = np.log(perplexity)
 	for i in range(dMatrix.shape[0]):
-		variance = 0.0001
-		tempPerplexity = 0
-		while tempPerplexity <= perplexity:
-			a_i = [0 if i==j else exp(-(dMatrix[i][j]/variance)**2) for j in range(dMatrix.shape[1])]
-			tempPerplexity = sum(a_i)
-			variance += 0.001
-		variance_matrix[i] = variance
-
-	for i,variance in zip(range(dMatrix.shape[0]), variance_matrix):
-		for j in range(dMatrix.shape[1]):
-			affinity_matrix[i][j] = exp(-(dMatrix[i][j]/variance)**2)
+		variance_min = -np.inf
+	    	variance_max =  np.inf
+	    	d_i = dMatrix[i, np.concatenate((np.r_[0:i], np.r_[i+1:n]))]
+	    	(c_perplexity, thisA) = get_perplexity(d_i, variance_matrix[i])
+	    	perplexity_diff = c_perplexity - logU
+	    	tries = 0
+	    	while (np.isnan(perplexity_diff) or np.abs(perplexity_diff) > eps) and tries < 5000:
+	      		if np.isnan(perplexity_diff):
+				variance_matrix[i] = variance_matrix[i] / 10.0
+	      		elif perplexity_diff > 0:
+				variance_min = variance_matrix[i].copy()
+				if variance_max == np.inf or variance_max == -np.inf:
+		  			variance_matrix[i] = variance_matrix[i] * 2.0
+				else:
+		  			variance_matrix[i] = (variance_matrix[i] + variance_max) / 2.0
+	      		else:
+				variance_max = variance_matrix[i].copy()
+				if variance_min == np.inf or variance_min == -np.inf:
+		  			variance_matrix[i] = variance_matrix[i] / 2.0
+				else:
+		  		variance_matrix[i] = (variance_matrix[i] + variance_min) / 2.0
+	      		(c_perplexity, thisA) = get_perplexity(d_i, variance_matrix[i])
+	      		perplexity_diff = c_perplexity - logU
+	      		tries += 1
+	    	affinity_matrix[i, np.concatenate((np.r_[0:i], np.r_[i+1:n]))] = thisA
 	return variance_matrix, affinity_matrix
-
 	
 
 def binding_matrix(aMatrix):
-	binding_matrix = np.empty(aMatrix.shape)
-	for i in range(aMatrix.shape[0]):
-		for j in range(aMatrix.shape[1]):
-			binding_matrix[i][j] = aMatrix[i][j]/np.sum(aMatrix[i])
-
+	binding_matrix = aMatrix / aMatrix.sum(axis=1)[:,np.newaxis]
 	return binding_matrix
 
 
 def outlier_probability(bMatrix):
-	outlier_matrix = np.empty(bMatrix.shape[0])
-	for i in range(bMatrix.shape[0]):
-		condition = [(1-bMatrix[j][i]) for j in range(bMatrix.shape[0])]
-		outlier_matrix[i] = np.prod(condition)
+	outlier_matrix = np.prod(1-bMatrix, 0)
 	return outlier_matrix
 
 
