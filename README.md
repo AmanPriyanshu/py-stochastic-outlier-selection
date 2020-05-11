@@ -142,6 +142,6 @@ We can represent the output as:
 
 We can clearly see the accuracy of the SOS algorithm with the only parameter to set up being perplexity (used: 25, here).
 
-CONCLUSION:
+## CONCLUSION:
 
  SOS is a very useful outlier selection algorithm and it has far superior performance than 1) KNNDD 2)Outlier-score plots 3)LOF 4)LOCI 5)LOCD. It is clearly a very useful outlier selection algorithm and can be used in many different datasets.
