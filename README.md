@@ -98,7 +98,7 @@ affinity_matrix:
 Take a look at the first row which is an outlier. Here, we can see that the outlier has low values for every normal case it is in the order of 0.1 or 0.2 generally. However, any other outlier has a value near 0.9 or 0.8. On the other hand, the last row which is a normal data-point has a very very low affinity towards outlier even equal to e^-196 in some cases. Whereas, all normal cases have a value greater than 0.5 even in the range of 0.5 to 0.7.
 
 
-Step 3: BINDING MATRIX:
+### Step 3: BINDING MATRIX:
 
 The binding matrix is a row-wise normalized version of the affinity matrix. It is given by the following code:
 
@@ -113,7 +113,7 @@ Now let us take a look at the matrix it gives as output:
 Taking a look at the first row (which is an outlier) we can see that most of the values are of the order of 0.01 on the other hand upon outlier data-point it is in the order of 0.07. In the case of a normal data-point, we can see that normal-points are of the order 0.01 or 0.02 and outliers are very low even to the order of e^-100. This clearly highlights the value of the binding matrix which allows us to analyse the bound-affinity of all the data-points w.r.t. each other.
 
 
-Step 4: OUTLIER PROBABILITY MATRIX:
+### Step 4: OUTLIER PROBABILITY MATRIX:
 
 Now, the probability matrix gives us the probability of whether a particular data-point is an outlier or not. It is given by the mathematical formula:
 
@@ -134,7 +134,7 @@ Let us take a look at the output, as this is the final probability of whether a 
 Now take a look here, we can see the different probabilities with which a particular data-points are an outlier or not. We can see that the first point is an outlier with the probability of 73.83% whereas the second is an outlier with a probability of only 34.92% and hence we can conclude that it is not an outlier but rather part of the cluster. We can create an if-condition where every data-point having a probability above 70% is categorised as an outlier.
 
 
-Step 5: CLASSIFIER:
+### Step 5: CLASSIFIER:
 
 We can represent the output as:
 
